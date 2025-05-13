@@ -1,5 +1,5 @@
 {
-  "name": "eneko96/bufferedlog",
+  "name": "@eneko96/bufferedlog",
   "version": "1.0.2",
   "description": "",
   "main": "dist/index.js",
