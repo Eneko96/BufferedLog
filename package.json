@@ -2,12 +2,22 @@
   "name": "@eneko96/bufferedlog",
   "version": "1.0.2",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "type": "module",
   "scripts": {
-    "dev": "tsc && node dist/example.js",
+    "dev": "npm run build:esm && node dist/esm/example.js",
     "test": "node --experimental-strip-types test.ts",
-    "build": "tsc"
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.json",
+    "build:esm": "tsc -p tsconfig.esm.json"
   },
   "keywords": [],
   "author": "",

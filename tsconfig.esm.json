@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ESNext",
     "esModuleInterop": true,
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist/cjs"
+    "outDir": "dist/esm",
+    "declaration": true
   },
   "lib": ["es2015"],
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]
 }
+
