@@ -3,15 +3,17 @@
   "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
+  "type": "module",
   "scripts": {
     "dev": "tsc && node dist/example.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-strip-types test.ts",
     "build": "tsc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^20.9.2",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "eslint": "^8.54.0",

@@ -1,15 +1,29 @@
 export class BufferedLogger {
-  private buffer: string[];
+  private buffer: string[] = [];
   private bufferSize: number;
   private isWorker: boolean;
-  private worker: Worker | null;
+  private worker: Worker | null = null;
+  private customFlush: ((buffer: string[]) => void) | null;
 
-  constructor(bufferSize = 10, isWorker = false) {
-    this.buffer = [];
+  constructor({
+    bufferSize = 10,
+    isWorker = false,
+    customFlush,
+  }: {
+    bufferSize?: number;
+    isWorker?: boolean;
+    customFlush?: (buffer: string[]) => void;
+  }) {
     this.bufferSize = bufferSize;
+    this.isWorker = isWorker;
+    this.customFlush = customFlush;
+
     if (isWorker && typeof Worker !== "undefined") {
-      this.isWorker = isWorker;
-      this.worker = new Worker("./worker.js");
+      try {
+        this.worker = new Worker("./worker.js");
+      } catch (err) {
+        console.error("Failed to initialise worker:", err);
+      }
     }
   }
 
@@ -21,18 +35,25 @@ export class BufferedLogger {
     }
   }
 
-  flush(delay = 500) {
-    setInterval(() => {
-      if (this.isWorker && this.worker && this.buffer.length > 0) {
-        for (const message of this.buffer) {
-          this.worker.postMessage(message);
-        }
-      } else {
-        for (const message of this.buffer) {
-          console.log(message);
-        }
+  flush() {
+    if (this.customFlush) {
+      this.customFlush(this.buffer);
+      return;
+    } else if (this.isWorker && this.worker) {
+      for (const message of this.buffer) {
+        this.worker.postMessage(message);
       }
-      this.buffer = [];
-    }, delay);
+    } else {
+      this.buffer.forEach((message) => console.log(message));
+    }
+
+    this.buffer = [];
+  }
+
+  dispose() {
+    if (this.worker) {
+      this.worker.terminate();
+      this.worker = null;
+    }
   }
 }
