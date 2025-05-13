@@ -11,7 +11,6 @@
       "require": "./dist/cjs/index.js"
     }
   },
-  "type": "module",
   "scripts": {
     "dev": "npm run build:esm && node dist/esm/example.js",
     "test": "node --experimental-strip-types test.ts",
